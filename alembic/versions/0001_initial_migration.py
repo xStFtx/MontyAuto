@@ -11,12 +11,11 @@ import sqlalchemy as sa
 
 def upgrade():
     op.create_table(
-        'jobs',
-        sa.Column('id', sa.String(36), primary_key=True),
-        sa.Column('status', sa.String(20), nullable=False),
-        sa.Column('created_at', sa.DateTime, server_default=sa.func.now()),
-        sa.Column('updated_at', sa.DateTime, onupdate=sa.func.now())
+        'users',
+        sa.Column('id', sa.Integer, primary_key=True),
+        sa.Column('email', sa.String(255), unique=True),
+        sa.Column('created_at', sa.DateTime, default=sa.func.now())
     )
 
 def downgrade():
-    op.drop_table('jobs') 
+    op.drop_table('users') 

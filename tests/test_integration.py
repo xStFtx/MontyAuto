@@ -13,4 +13,4 @@ def test_trading_execution(mock_trader):
     app.trader = mock_trader
     result = app.run_service('trade', symbol="BTCUSDT")
     assert result['status'] == "success"
-    mock_trader.execute_strategy.assert 
+    mock_trader.execute_strategy.assert_called_once_with(symbol="BTCUSDT") 

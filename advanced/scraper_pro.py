@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from fp.fp import FreeProxy
+from fp import FP
 from random import choice
 import urllib3
 
@@ -15,7 +15,7 @@ class AdvancedScraper:
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
     
     def refresh_proxies(self):
-        self.proxy_list = FreeProxy().get_proxy_list()
+        self.proxy_list = FP().get_proxy_list()
     
     def make_request(self, url):
         for _ in range(5):

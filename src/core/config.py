@@ -1,21 +1,14 @@
-import os
-from dotenv import load_dotenv
-from pathlib import Path
-import yaml
+from pydantic_settings import BaseSettings
+from pydantic import PostgresDsn, RedisDsn
 
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
-
-load_dotenv(BASE_DIR / ".env")
-
-class Config:
-    def __init__(self):
-        self.settings = self._load_config()
-        
-    def _load_config(self):
-        with open(BASE_DIR / "config.yaml") as f:
-            return yaml.safe_load(f)
+class Settings(BaseSettings):
+    postgres_url: PostgresDsn
+    redis_url: RedisDsn
+    jwt_secret: str
+    jwt_algorithm: str = "HS256"
     
-    def get(self, key, default=None):
-        return os.getenv(key, self.settings.get(key, default))
+    class Config:
+        env_file = ".env"
+        case_sensitive = True
 
-config = Config() 
+settings = Settings() 

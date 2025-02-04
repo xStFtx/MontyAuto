@@ -9,4 +9,13 @@
 Include:
 - Description of changes
 - Testing instructions
-- Documentation updates 
+- Documentation updates
+
+## Code Style Guidelines
+
+Please follow these guidelines:
+
+- Use 4 spaces for indentation
+- Keep line length under 88 characters
+- Use type hints for all function signatures
+- Write docstrings for public methods 

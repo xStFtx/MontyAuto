@@ -17,7 +17,7 @@ Enterprise-grade automation platform with AI processing, algorithmic trading, an
 - **Monitoring** - Prometheus/Grafana integration
 - **Security** - JWT authentication, rate limiting, and audit logging
 
-## ��️ Architecture
+## 🏗️ Architecture
 
 ```
 ┌─────────────┐       ┌──────────────┐
@@ -205,9 +205,6 @@ curl http://localhost:8000/health
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
-## 🔒 Security
-
-For security issues, please read [SECURITY.md](SECURITY.md) and email security@example.com.
 
 ## 📄 License
 
@@ -217,12 +214,6 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) file for
 
 The trading module involves real financial risk. Always test strategies in sandbox environments before live deployment.
 
-## 📞 Support
-
-- Documentation: [docs/](docs/)
-- Issues: [GitHub Issues](https://github.com/yourusername/automation-enterprise/issues)
-- Email: support@example.com
-
 ---
 
-Made with ❤️ by [Your Name]
+Made with ❤️ by [xstftx]

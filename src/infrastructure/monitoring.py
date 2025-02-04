@@ -1,19 +1,45 @@
-from prometheus_client import start_http_server, Counter, Gauge
+from prometheus_client import Counter, Histogram
+from fastapi import Request
 import time
+from opentelemetry import trace
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 
-REQUESTS = Counter('http_requests_total', 'Total HTTP Requests')
-ERRORS = Counter('http_errors_total', 'Total HTTP Errors')
-LATENCY = Gauge('http_request_latency_seconds', 'HTTP Request Latency')
+REQUEST_COUNT = Counter(
+    'http_requests_total',
+    'Total HTTP Requests',
+    ['method', 'endpoint', 'status']
+)
 
-class Monitor:
-    def __init__(self):
-        start_http_server(8001)
+REQUEST_LATENCY = Histogram(
+    'http_request_duration_seconds',
+    'HTTP Request Latency',
+    ['method', 'endpoint']
+)
+
+trace.set_tracer_provider(TracerProvider())
+tracer = trace.get_tracer(__name__)
+
+def configure_tracing():
+    otlp_exporter = OTLPSpanExporter(endpoint="http://jaeger:4317", insecure=True)
+    span_processor = BatchSpanProcessor(otlp_exporter)
+    trace.get_tracer_provider().add_span_processor(span_processor)
+
+async def monitor_requests(request: Request, call_next):
+    start_time = time.time()
+    response = await call_next(request)
+    process_time = time.time() - start_time
     
-    @staticmethod
-    def track_latency(func):
-        def wrapper(*args, **kwargs):
-            start_time = time.time()
-            result = func(*args, **kwargs)
-            LATENCY.set(time.time() - start_time)
-            return result
-        return wrapper 
+    REQUEST_COUNT.labels(
+        request.method,
+        request.url.path,
+        response.status_code
+    ).inc()
+    
+    REQUEST_LATENCY.labels(
+        request.method,
+        request.url.path
+    ).observe(process_time)
+    
+    return response 

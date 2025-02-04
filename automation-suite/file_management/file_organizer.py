@@ -1,6 +1,7 @@
 import os
 import shutil
 from pathlib import Path
+from datetime import datetime
 
 def organize_files(source_dir: str, organize_by: str = 'type') -> None:
     """
@@ -23,6 +24,13 @@ def organize_files(source_dir: str, organize_by: str = 'type') -> None:
             
             dest_dir.mkdir(exist_ok=True)
             shutil.move(str(item), str(dest_dir / item.name))
+
+def organize_files_by_date(path: str):
+    for file in os.listdir(path):
+        if os.path.isfile(os.path.join(path, file)):
+            timestamp = os.path.getmtime(os.path.join(path, file))
+            date = datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d')
+            # ... rest of the code ...
 
 if __name__ == "__main__":
     import sys
